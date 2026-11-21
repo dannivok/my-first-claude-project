@@ -34,6 +34,7 @@ namespace TextDungeon
                 {
                     case 1:
                         GoForward();
+                        running = player.IsAlive;
                         break;
                     case 2:
                         player.PrintStats();
@@ -83,7 +84,9 @@ namespace TextDungeon
             switch (type)
             {
                 case RoomType.Monster:
-                    Console.WriteLine("A szörny elbújik előled. (A harc a K5-ben jön.)");
+                    string name = Texts.MonsterNames[random.Next(Texts.MonsterNames.Length)];
+                    Monster monster = new Monster(name, 8, 1, 3);
+                    new Combat(player, monster, random).Run();
                     break;
                 case RoomType.Gold:
                     int gold = random.Next(5, 16);

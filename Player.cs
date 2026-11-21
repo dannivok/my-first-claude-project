@@ -34,6 +34,19 @@ namespace TextDungeon
             return Hp - before;
         }
 
+        /// <summary>Sebzést kap, a HP 0 alá nem mehet. Visszaadja a ténylegesen elvesztett HP-t.</summary>
+        public int TakeDamage(int amount)
+        {
+            int before = Hp;
+            Hp = Math.Clamp(Hp - amount, 0, MaxHp);
+            return before - Hp;
+        }
+
+        public int RollDamage(Random random)
+        {
+            return random.Next(MinDamage, MaxDamage + 1);
+        }
+
         public void AddGold(int amount)
         {
             Gold += amount;
