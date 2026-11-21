@@ -75,7 +75,12 @@ namespace TextDungeon
                 {
                     int gold = random.Next(3, 9);
                     player.AddGold(gold);
-                    Console.WriteLine($"Legyőzted: {monster.Name}! Jutalom: {gold} gold.");
+                    Console.WriteLine($"Legyőzted: {monster.Name}! Jutalom: {gold} gold és {monster.XpReward} XP.");
+                    int levelUps = player.AddXp(monster.XpReward);
+                    if (levelUps > 0)
+                    {
+                        Console.WriteLine($"LEVEL UP! Level {player.Level}: max HP {player.MaxHp}, sebzés {player.MinDamage}-{player.MaxDamage}, HP feltöltve.");
+                    }
                     return CombatResult.Won;
                 }
                 if (!player.IsAlive)

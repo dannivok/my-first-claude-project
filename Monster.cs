@@ -7,11 +7,13 @@ namespace TextDungeon
         public int MaxHp { get; }
         public int MinDamage { get; }
         public int MaxDamage { get; }
+        public int XpReward { get; }
 
         public bool IsAlive => Hp > 0;
 
-        public Monster(string name, int maxHp, int minDamage, int maxDamage)
+        public Monster(string name, int maxHp, int minDamage, int maxDamage, int xpReward)
         {
+            XpReward = xpReward;
             Name = name;
             MaxHp = maxHp;
             Hp = maxHp;

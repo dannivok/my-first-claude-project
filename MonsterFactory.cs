@@ -13,7 +13,7 @@ namespace TextDungeon
         public static Monster Create(int floor, Random random)
         {
             string name = Texts.MonsterNames[random.Next(Texts.MonsterNames.Length)];
-            return new Monster(name, BaseHp(floor), BaseMinDamage(floor), BaseMaxDamage(floor));
+            return new Monster(name, BaseHp(floor), BaseMinDamage(floor), BaseMaxDamage(floor), 3 + floor);
         }
     }
 }

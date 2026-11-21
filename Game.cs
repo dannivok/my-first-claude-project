@@ -53,7 +53,7 @@ namespace TextDungeon
 
         private void PrintStatus()
         {
-            Console.WriteLine($"{player.Name} | HP {player.Hp}/{player.MaxHp} | Floor {floor} | Szoba {roomOnFloor}/{RoomsPerFloor} | Gold {player.Gold} | Potion {player.Potions}");
+            Console.WriteLine($"{player.Name} | HP {player.Hp}/{player.MaxHp} | Floor {floor} | Szoba {roomOnFloor}/{RoomsPerFloor} | Gold {player.Gold} | Potion {player.Potions} | Lvl {player.Level} | XP {player.Xp}/{player.XpToNextLevel}");
         }
 
         private void GoForward()

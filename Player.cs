@@ -12,6 +12,11 @@ namespace TextDungeon
         public int MaxDamage { get; private set; }
         public int Gold { get; private set; }
         public int Potions { get; private set; }
+        public int Level { get; private set; } = 1;
+        public int Xp { get; private set; }
+
+        /// <summary>Az 1. level up 10, a 2. 20, a 3. 30 XP-nél jön (és így tovább).</summary>
+        public int XpToNextLevel => 10 * Level;
 
         public bool IsAlive => Hp > 0;
 
@@ -47,6 +52,24 @@ namespace TextDungeon
             return random.Next(MinDamage, MaxDamage + 1);
         }
 
+        /// <summary>XP-t ad. Visszaadja, hány level up történt.</summary>
+        public int AddXp(int amount)
+        {
+            Xp += amount;
+            int levelUps = 0;
+            while (Xp >= XpToNextLevel)
+            {
+                Xp -= XpToNextLevel;
+                Level++;
+                MaxHp += 3;
+                MinDamage++;
+                MaxDamage++;
+                Hp = MaxHp;
+                levelUps++;
+            }
+            return levelUps;
+        }
+
         public void AddGold(int amount)
         {
             Gold += amount;
@@ -72,6 +95,8 @@ namespace TextDungeon
         public void PrintStats()
         {
             Console.WriteLine($"Név:      {Name}");
+            Console.WriteLine($"Level:    {Level}");
+            Console.WriteLine($"XP:       {Xp}/{XpToNextLevel}");
             Console.WriteLine($"HP:       {Hp}/{MaxHp}");
             Console.WriteLine($"Sebzés:   {MinDamage}-{MaxDamage}");
             Console.WriteLine($"Gold:     {Gold}");
