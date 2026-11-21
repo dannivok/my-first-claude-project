@@ -60,6 +60,24 @@ namespace TextDungeon
             return texts[random.Next(texts.Length)];
         }
 
+        /// <summary>
+        /// Létrehoz egy ajtót: 75%-ban a valódi típus jelét kapja, különben egy másik típusét.
+        /// </summary>
+        public static Door CreateDoor(Random random)
+        {
+            RoomType type = RollType(random);
+            RoomType hintType = type;
+            if (random.Next(100) >= 75)
+            {
+                RoomType[] others = rooms
+                    .Where(r => r.Type != type && r.Chance > 0)
+                    .Select(r => r.Type)
+                    .ToArray();
+                hintType = others[random.Next(others.Length)];
+            }
+            return new Door(type, RandomHint(hintType, random));
+        }
+
         private static RoomInfo Get(RoomType type)
         {
             return rooms.First(r => r.Type == type);

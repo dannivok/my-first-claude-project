@@ -57,8 +57,21 @@ namespace TextDungeon
 
         private void GoForward()
         {
-            RoomType type = RoomTable.RollType(random);
-            EnterRoom(type);
+            int doorCount = random.Next(2, 4);
+            List<Door> doors = new List<Door>();
+            for (int i = 0; i < doorCount; i++)
+            {
+                doors.Add(RoomTable.CreateDoor(random));
+            }
+
+            Console.WriteLine($"{doorCount} ajtó áll előtted:");
+            for (int i = 0; i < doors.Count; i++)
+            {
+                Console.WriteLine($"[{i + 1}] {doors[i].Hint}");
+            }
+            int choice = Input.ReadInt(1, doors.Count);
+            Console.WriteLine();
+            EnterRoom(doors[choice - 1].RoomType);
         }
 
         private void EnterRoom(RoomType type)
