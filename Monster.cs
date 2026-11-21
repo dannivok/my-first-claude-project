@@ -60,6 +60,11 @@ namespace TextDungeon
         /// <summary>Egy sima ütés. A lost-ba kerül, mennyi HP-t vesztett a játékos.</summary>
         protected string Strike(Player target, Random random, out int lost)
         {
+            if (target.TryDodge(random))
+            {
+                lost = 0;
+                return $"{Name} támad, de {target.Name} kitér előle!";
+            }
             int damage = random.Next(MinDamage, MaxDamage + 1);
             lost = target.TakeDamage(damage);
             return $"{Name} megüt: -{lost} HP.";

@@ -2,9 +2,14 @@ namespace TextDungeon
 {
     /// <summary>
     /// A játékos minden adata: név, HP, max HP, sebzés, gold, potion.
+    /// A kasztok közös absztrakt őse: a kezdő statokat a kaszt adja meg,
+    /// a passzív képességet egy virtuális metódus felülírása.
     /// </summary>
-    internal class Player
+    internal abstract class Player
     {
+        public abstract string ClassName { get; }
+        public abstract string PassiveDescription { get; }
+
         public string Name { get; }
         public int Hp { get; private set; }
         public int MaxHp { get; private set; }
@@ -22,16 +27,34 @@ namespace TextDungeon
 
         public bool IsAlive => Hp > 0;
 
-        public Player(string name, DifficultySettings settings)
+        protected Player(string name, DifficultySettings settings, int baseHp, int minDamage, int maxDamage)
         {
             Name = name;
-            MaxHp = 20 + settings.HpBonus;
+            MaxHp = Math.Max(1, baseHp + settings.HpBonus);
             Hp = MaxHp;
-            MinDamage = 2;
-            MaxDamage = 5;
+            MinDamage = minDamage;
+            MaxDamage = maxDamage;
             Gold = 0;
             AddGold(settings.StartGold);
             Potions = 1;
+        }
+
+        /// <summary>A kapott sebzés módosítása (alapból nincs).</summary>
+        protected virtual int ReduceDamage(int amount)
+        {
+            return amount;
+        }
+
+        /// <summary>Kitér-e egy támadás elől (alapból soha).</summary>
+        public virtual bool TryDodge(Random random)
+        {
+            return false;
+        }
+
+        /// <summary>Új szobába lépéskor fut le. Ha történt valami, leírja, különben null.</summary>
+        public virtual string OnEnterRoom()
+        {
+            return null;
         }
 
         /// <summary>Gyógyít, legfeljebb max HP-ig. Visszaadja, mennyit gyógyult ténylegesen.</summary>
@@ -45,6 +68,7 @@ namespace TextDungeon
         /// <summary>Sebzést kap, a HP 0 alá nem mehet. Visszaadja a ténylegesen elvesztett HP-t.</summary>
         public int TakeDamage(int amount)
         {
+            amount = ReduceDamage(amount);
             int before = Hp;
             Hp = Math.Clamp(Hp - amount, 0, MaxHp);
             return before - Hp;
@@ -123,6 +147,7 @@ namespace TextDungeon
         public void PrintStats()
         {
             Console.WriteLine($"Név:      {Name}");
+            Console.WriteLine($"Kaszt:    {ClassName} ({PassiveDescription})");
             Console.WriteLine($"Level:    {Level}");
             Console.WriteLine($"XP:       {Xp}/{XpToNextLevel}");
             Console.WriteLine($"HP:       {Hp}/{MaxHp}");

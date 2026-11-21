@@ -28,8 +28,8 @@ namespace TextDungeon
             Difficulty difficulty = (Difficulty)(Input.ReadInt(1, 3) - 1);
             settings = DifficultySettings.For(difficulty);
 
-            player = new Player(name, settings);
-            Console.WriteLine($"Üdv a dungeonben, {player.Name}! (Difficulty: {settings.Difficulty})");
+            player = CreatePlayer(name);
+            Console.WriteLine($"Üdv a dungeonben, {player.Name} the {player.ClassName}! (Difficulty: {settings.Difficulty})");
 
             bool running = true;
             while (running)
@@ -58,6 +58,24 @@ namespace TextDungeon
             }
 
             GameOver();
+        }
+
+        /// <summary>Az egyetlen hely, ahol a kaszt számít: létrejön a megfelelő osztály példánya.</summary>
+        private Player CreatePlayer(string name)
+        {
+            Console.WriteLine("Válassz kasztot:");
+            Console.WriteLine("[1] Warrior (26 HP, 3-5 sebzés, -1 kapott sebzés)");
+            Console.WriteLine("[2] Mage    (16 HP, 2-4 sebzés, +1 HP minden szobában)");
+            Console.WriteLine("[3] Rogue   (20 HP, 2-5 sebzés, 20% dodge)");
+            switch (Input.ReadInt(1, 3))
+            {
+                case 1:
+                    return new Warrior(name, settings);
+                case 2:
+                    return new Mage(name, settings);
+                default:
+                    return new Rogue(name, settings);
+            }
         }
 
         private void PrintStatus()
@@ -103,6 +121,11 @@ namespace TextDungeon
             roomOnFloor++;
             roomsVisited++;
             Console.WriteLine(RoomTable.RandomDescription(type, random));
+            string passive = player.OnEnterRoom();
+            if (passive != null)
+            {
+                Console.WriteLine(passive);
+            }
 
             switch (type)
             {
