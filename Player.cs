@@ -27,9 +27,12 @@ namespace TextDungeon
 
         public bool IsAlive => Hp > 0;
 
-        protected Player(string name, DifficultySettings settings, int baseHp, int minDamage, int maxDamage)
+        public ISkill Skill { get; }
+
+        protected Player(string name, DifficultySettings settings, int baseHp, int minDamage, int maxDamage, ISkill skill)
         {
             Name = name;
+            Skill = skill;
             MaxHp = Math.Max(1, baseHp + settings.HpBonus);
             Hp = MaxHp;
             MinDamage = minDamage;
@@ -148,6 +151,7 @@ namespace TextDungeon
         {
             Console.WriteLine($"Név:      {Name}");
             Console.WriteLine($"Kaszt:    {ClassName} ({PassiveDescription})");
+            Console.WriteLine($"Skill:    {Skill.Name} ({Skill.Description}, 3 kör cooldown)");
             Console.WriteLine($"Level:    {Level}");
             Console.WriteLine($"XP:       {Xp}/{XpToNextLevel}");
             Console.WriteLine($"HP:       {Hp}/{MaxHp}");

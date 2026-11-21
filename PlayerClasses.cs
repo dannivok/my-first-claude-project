@@ -2,7 +2,7 @@ namespace TextDungeon
 {
     internal class Warrior : Player
     {
-        public Warrior(string name, DifficultySettings settings) : base(name, settings, 26, 3, 5) { }
+        public Warrior(string name, DifficultySettings settings) : base(name, settings, 26, 3, 5, new PowerStrike()) { }
 
         public override string ClassName => "Warrior";
         public override string PassiveDescription => "minden kapott sebzésből 1-gyel kevesebbet veszít, de legalább 1-et";
@@ -15,7 +15,7 @@ namespace TextDungeon
 
     internal class Mage : Player
     {
-        public Mage(string name, DifficultySettings settings) : base(name, settings, 16, 2, 4) { }
+        public Mage(string name, DifficultySettings settings) : base(name, settings, 16, 2, 4, new Fireball()) { }
 
         public override string ClassName => "Mage";
         public override string PassiveDescription => "minden új szobába lépéskor 1 HP-t regenerál";
@@ -29,7 +29,7 @@ namespace TextDungeon
 
     internal class Rogue : Player
     {
-        public Rogue(string name, DifficultySettings settings) : base(name, settings, 20, 2, 5) { }
+        public Rogue(string name, DifficultySettings settings) : base(name, settings, 20, 2, 5, new Steal()) { }
 
         public override string ClassName => "Rogue";
         public override string PassiveDescription => "20% eséllyel dodge-ol egy támadást";

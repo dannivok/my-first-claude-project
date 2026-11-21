@@ -29,13 +29,16 @@ namespace TextDungeon
         {
             Console.WriteLine($"Egy {monster.Name} támad rád! (HP {monster.Hp}, sebzés {monster.MinDamage}-{monster.MaxDamage})");
             Console.WriteLine($"Különlegesség: {monster.AbilityDescription}");
+            ISkill skill = player.Skill;
+            skill.Reset();
 
             while (true)
             {
                 Console.WriteLine();
                 Console.WriteLine($"{player.Name}: HP {player.Hp}/{player.MaxHp} | {monster.Name}: HP {monster.Hp}/{monster.MaxHp} | Potion {player.Potions}");
-                Console.WriteLine("[1] Attack  [2] Flee  [3] Potion");
-                int choice = Input.ReadInt(1, 3);
+                string skillState = skill.IsReady ? "kész" : $"cooldown: még {skill.RemainingCooldown} kör";
+                Console.WriteLine($"[1] Attack  [2] Flee  [3] Potion  [4] Skill: {skill.Name} ({skillState})");
+                int choice = Input.ReadInt(1, 4);
 
                 bool monsterStrikes;
                 switch (choice)
@@ -54,6 +57,15 @@ namespace TextDungeon
                         Console.WriteLine("Nem sikerült elmenekülni!");
                         monsterStrikes = true;
                         break;
+                    case 4:
+                        if (!skill.IsReady)
+                        {
+                            Console.WriteLine($"A {skill.Name} még {skill.RemainingCooldown} körig nem használható! (Nem telt el kör.)");
+                            continue;
+                        }
+                        Console.WriteLine(skill.Use(player, monster, random));
+                        monsterStrikes = monster.IsAlive;
+                        break;
                     default:
                         if (!player.DrinkPotion())
                         {
@@ -69,6 +81,7 @@ namespace TextDungeon
                 {
                     Console.WriteLine(monster.Attack(player, random));
                 }
+                skill.EndRound();
 
                 Console.WriteLine($"-> {player.Name}: {player.Hp} HP, {monster.Name}: {monster.Hp} HP");
 
