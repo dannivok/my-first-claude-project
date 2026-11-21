@@ -9,6 +9,7 @@ namespace TextDungeon
         private readonly Random random = new Random();
         private readonly Shop shop = new Shop();
         private Player player;
+        private DifficultySettings settings;
         private int floor = 1;
         private int roomOnFloor = 0;
         private int roomsVisited = 0;
@@ -20,8 +21,13 @@ namespace TextDungeon
             Console.WriteLine();
 
             string name = Input.ReadName("Add meg a neved: ");
-            player = new Player(name);
-            Console.WriteLine($"Üdv a dungeonben, {player.Name}!");
+            Console.WriteLine("Válassz difficulty-t:");
+            Console.WriteLine("[1] Easy  [2] Normal  [3] Hard");
+            Difficulty difficulty = (Difficulty)(Input.ReadInt(1, 3) - 1);
+            settings = DifficultySettings.For(difficulty);
+
+            player = new Player(name, settings);
+            Console.WriteLine($"Üdv a dungeonben, {player.Name}! (Difficulty: {settings.Difficulty})");
 
             bool running = true;
             while (running)
@@ -99,8 +105,8 @@ namespace TextDungeon
             switch (type)
             {
                 case RoomType.Monster:
-                    Monster monster = MonsterFactory.Create(floor, random);
-                    new Combat(player, monster, random).Run();
+                    Monster monster = MonsterFactory.Create(floor, random, settings);
+                    new Combat(player, monster, random, settings.FleeChance).Run();
                     break;
                 case RoomType.Gold:
                     int gold = random.Next(5, 16);

@@ -10,10 +10,12 @@ namespace TextDungeon
         public static int BaseMinDamage(int floor) => 1 + (floor - 1) / 2;
         public static int BaseMaxDamage(int floor) => 3 + (floor - 1);
 
-        public static Monster Create(int floor, Random random)
+        public static Monster Create(int floor, Random random, DifficultySettings settings)
         {
             string name = Texts.MonsterNames[random.Next(Texts.MonsterNames.Length)];
-            return new Monster(name, BaseHp(floor), BaseMinDamage(floor), BaseMaxDamage(floor), 3 + floor);
+            int min = Math.Max(1, BaseMinDamage(floor) + settings.MonsterDamageModifier);
+            int max = Math.Max(min, BaseMaxDamage(floor) + settings.MonsterDamageModifier);
+            return new Monster(name, BaseHp(floor), min, max, 3 + floor);
         }
     }
 }

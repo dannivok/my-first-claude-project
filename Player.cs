@@ -20,14 +20,15 @@ namespace TextDungeon
 
         public bool IsAlive => Hp > 0;
 
-        public Player(string name)
+        public Player(string name, DifficultySettings settings)
         {
             Name = name;
-            MaxHp = 20;
+            MaxHp = 20 + settings.HpBonus;
             Hp = MaxHp;
             MinDamage = 2;
             MaxDamage = 5;
             Gold = 0;
+            AddGold(settings.StartGold);
             Potions = 1;
         }
 

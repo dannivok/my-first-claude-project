@@ -12,17 +12,17 @@ namespace TextDungeon
     /// </summary>
     internal class Combat
     {
-        private const int FleeChance = 50;
-
         private readonly Player player;
         private readonly Monster monster;
         private readonly Random random;
+        private readonly int fleeChance;
 
-        public Combat(Player player, Monster monster, Random random)
+        public Combat(Player player, Monster monster, Random random, int fleeChance)
         {
             this.player = player;
             this.monster = monster;
             this.random = random;
+            this.fleeChance = fleeChance;
         }
 
         public CombatResult Run()
@@ -45,7 +45,7 @@ namespace TextDungeon
                         monsterStrikes = monster.IsAlive;
                         break;
                     case 2:
-                        if (random.Next(100) < FleeChance)
+                        if (random.Next(100) < fleeChance)
                         {
                             Console.WriteLine("Sikerült elmenekülnöd! Jutalom nélkül hagyod el a szobát.");
                             return CombatResult.Fled;
