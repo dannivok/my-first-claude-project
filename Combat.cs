@@ -28,6 +28,7 @@ namespace TextDungeon
         public CombatResult Run()
         {
             Console.WriteLine($"Egy {monster.Name} támad rád! (HP {monster.Hp}, sebzés {monster.MinDamage}-{monster.MaxDamage})");
+            Console.WriteLine($"Különlegesség: {monster.AbilityDescription}");
 
             while (true)
             {

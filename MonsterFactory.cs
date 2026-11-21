@@ -2,6 +2,7 @@ namespace TextDungeon
 {
     /// <summary>
     /// Monstereket készít az aktuális floor erőssége szerint.
+    /// A monster típusa csak itt, a sorsoláskor számít.
     /// </summary>
     internal static class MonsterFactory
     {
@@ -13,9 +14,22 @@ namespace TextDungeon
         public static Monster Create(int floor, Random random, DifficultySettings settings)
         {
             string name = Texts.MonsterNames[random.Next(Texts.MonsterNames.Length)];
+            int hp = BaseHp(floor);
             int min = Math.Max(1, BaseMinDamage(floor) + settings.MonsterDamageModifier);
             int max = Math.Max(min, BaseMaxDamage(floor) + settings.MonsterDamageModifier);
-            return new Monster(name, BaseHp(floor), min, max, 3 + floor);
+            int xp = 3 + floor;
+
+            switch (random.Next(4))
+            {
+                case 0:
+                    return new Goblin(name, hp, min, max, xp);
+                case 1:
+                    return new Skeleton(name, hp, min, max, xp);
+                case 2:
+                    return new Vampire(name, hp, min, max, xp);
+                default:
+                    return new Orc(name, hp, min, max, xp);
+            }
         }
     }
 }
