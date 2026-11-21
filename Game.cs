@@ -8,6 +8,7 @@ namespace TextDungeon
 
         private readonly Random random = new Random();
         private readonly Shop shop = new Shop();
+        private readonly Leaderboard leaderboard = new Leaderboard();
         private Player player;
         private DifficultySettings settings;
         private int floor = 1;
@@ -19,6 +20,7 @@ namespace TextDungeon
             Console.OutputEncoding = Encoding.UTF8; // hogy az ékezetes betűk jól jelenjenek meg
             Console.WriteLine(Texts.Title);
             Console.WriteLine();
+            leaderboard.Load();
 
             string name = Input.ReadName("Add meg a neved: ");
             Console.WriteLine("Válassz difficulty-t:");
@@ -147,6 +149,13 @@ namespace TextDungeon
             }
         }
 
+        /// <summary>Score = (10 × elért floor + összes összegyűjtött gold) × difficulty szorzó, lefelé kerekítve.</summary>
+        private int CalculateScore()
+        {
+            int raw = 10 * floor + player.TotalGoldEarned;
+            return (int)Math.Floor(raw * settings.ScoreMultiplier);
+        }
+
         private void GameOver()
         {
             Console.WriteLine();
@@ -154,7 +163,20 @@ namespace TextDungeon
             Console.WriteLine($"Elért floor:      {floor}");
             Console.WriteLine($"Bejárt szobák:    {roomsVisited}");
             Console.WriteLine($"Gold:             {player.Gold}");
+            int score = CalculateScore();
+            Console.WriteLine($"Score:            {score}  ({settings.Difficulty}, x{settings.ScoreMultiplier})");
             Console.WriteLine("=================================");
+            Console.WriteLine();
+
+            if (player.IsAlive)
+            {
+                Console.WriteLine("Kiléptél, ezért az eredményed nem kerül a leaderboard-ra.");
+            }
+            else
+            {
+                leaderboard.Add(player.Name, score, settings.Difficulty);
+            }
+            leaderboard.Print();
             Console.WriteLine();
             Console.WriteLine("Nyomj meg egy billentyűt a kilépéshez.");
             Input.WaitForKey();

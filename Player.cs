@@ -12,6 +12,8 @@ namespace TextDungeon
         public int MaxDamage { get; private set; }
         public int Gold { get; private set; }
         public int Potions { get; private set; }
+        /// <summary>Az összes valaha összegyűjtött gold (a kezdő és az elköltött is).</summary>
+        public int TotalGoldEarned { get; private set; }
         public int Level { get; private set; } = 1;
         public int Xp { get; private set; }
 
@@ -74,6 +76,7 @@ namespace TextDungeon
         public void AddGold(int amount)
         {
             Gold += amount;
+            TotalGoldEarned += amount;
         }
 
         /// <summary>Levonja az árat, ha van elég gold. Ha nincs, false.</summary>
