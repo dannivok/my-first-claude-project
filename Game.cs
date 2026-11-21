@@ -73,6 +73,19 @@ namespace TextDungeon
             int choice = Input.ReadInt(1, doors.Count);
             Console.WriteLine();
             EnterRoom(doors[choice - 1].RoomType);
+
+            if (player.IsAlive && roomOnFloor >= RoomsPerFloor)
+            {
+                NextFloor();
+            }
+        }
+
+        private void NextFloor()
+        {
+            floor++;
+            roomOnFloor = 0;
+            Console.WriteLine();
+            Console.WriteLine($"*** Lejutottál a(z) {floor}. floor-ra! A monsterek itt erősebbek. ***");
         }
 
         private void EnterRoom(RoomType type)
@@ -84,8 +97,7 @@ namespace TextDungeon
             switch (type)
             {
                 case RoomType.Monster:
-                    string name = Texts.MonsterNames[random.Next(Texts.MonsterNames.Length)];
-                    Monster monster = new Monster(name, 8, 1, 3);
+                    Monster monster = MonsterFactory.Create(floor, random);
                     new Combat(player, monster, random).Run();
                     break;
                 case RoomType.Gold:
