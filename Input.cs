@@ -33,6 +33,35 @@ namespace TextDungeon
             }
         }
 
+        /// <summary>
+        /// Az egyetlen számbeolvasó metódus. Csak min és max közötti számmal tér vissza,
+        /// hibás bevitelnél szól és újra kérdez.
+        /// </summary>
+        public static int ReadInt(int min, int max)
+        {
+            while (true)
+            {
+                Console.Write($"Választás ({min}-{max}): ");
+                string input = ReadLine();
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    Console.WriteLine("Nem írtál be semmit, próbáld újra!");
+                }
+                else if (!int.TryParse(input.Trim(), out int number))
+                {
+                    Console.WriteLine("Ez nem szám, próbáld újra!");
+                }
+                else if (number < min || number > max)
+                {
+                    Console.WriteLine($"Csak {min} és {max} közötti számot választhatsz!");
+                }
+                else
+                {
+                    return number;
+                }
+            }
+        }
+
         /// <summary>Vár egy billentyűre (átirányított bemenetnél nem).</summary>
         public static void WaitForKey()
         {

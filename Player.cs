@@ -26,6 +26,26 @@ namespace TextDungeon
             Potions = 1;
         }
 
+        /// <summary>Gyógyít, legfeljebb max HP-ig. Visszaadja, mennyit gyógyult ténylegesen.</summary>
+        public int Heal(int amount)
+        {
+            int before = Hp;
+            Hp = Math.Clamp(Hp + amount, 0, MaxHp);
+            return Hp - before;
+        }
+
+        /// <summary>Megiszik egy potion-t (+8 HP). Ha nincs potion, false.</summary>
+        public bool DrinkPotion()
+        {
+            if (Potions <= 0)
+            {
+                return false;
+            }
+            Potions--;
+            Heal(8);
+            return true;
+        }
+
         public void PrintStats()
         {
             Console.WriteLine($"Név:      {Name}");
