@@ -49,6 +49,11 @@ namespace TextDungeon
                         monsterStrikes = monster.IsAlive;
                         break;
                     case 2:
+                        if (!monster.CanFlee)
+                        {
+                            Console.WriteLine($"{monster.Name} elől nem lehet elmenekülni! (Nem telt el kör.)");
+                            continue;
+                        }
                         if (random.Next(100) < fleeChance)
                         {
                             Console.WriteLine("Sikerült elmenekülnöd! Jutalom nélkül hagyod el a szobát.");
@@ -87,7 +92,7 @@ namespace TextDungeon
 
                 if (!monster.IsAlive)
                 {
-                    int gold = random.Next(3, 9);
+                    int gold = monster.RollGoldReward(random);
                     player.AddGold(gold);
                     Console.WriteLine($"Legyőzted: {monster.Name}! Jutalom: {gold} gold és {monster.XpReward} XP.");
                     int levelUps = player.AddXp(monster.XpReward);

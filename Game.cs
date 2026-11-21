@@ -5,6 +5,7 @@ namespace TextDungeon
     internal class Game
     {
         private const int RoomsPerFloor = 5;
+        private const int BossFloorInterval = 5;
 
         private readonly Random random = new Random();
         private readonly Shop shop = new Shop();
@@ -85,14 +86,24 @@ namespace TextDungeon
 
         private void GoForward()
         {
-            int doorCount = random.Next(2, 4);
             List<Door> doors = new List<Door>();
-            for (int i = 0; i < doorCount; i++)
+            bool bossRoom = floor % BossFloorInterval == 0 && roomOnFloor == RoomsPerFloor - 1;
+            if (bossRoom)
             {
-                doors.Add(RoomTable.CreateDoor(random));
+                // Minden 5. floor utolsó szobája: egyetlen ajtó vezet a boss-hoz.
+                doors.Add(new Door(RoomType.Boss, RoomTable.RandomHint(RoomType.Boss, random)));
+                Console.WriteLine("Egyetlen ajtó áll előtted. Innen nincs visszaút...");
+            }
+            else
+            {
+                int doorCount = random.Next(2, 4);
+                for (int i = 0; i < doorCount; i++)
+                {
+                    doors.Add(RoomTable.CreateDoor(random));
+                }
+                Console.WriteLine($"{doorCount} ajtó áll előtted:");
             }
 
-            Console.WriteLine($"{doorCount} ajtó áll előtted:");
             for (int i = 0; i < doors.Count; i++)
             {
                 Console.WriteLine($"[{i + 1}] {doors[i].Hint}");
@@ -116,6 +127,11 @@ namespace TextDungeon
             shop.Open(player);
         }
 
+        private void Fight(Monster monster)
+        {
+            new Combat(player, monster, random, settings.FleeChance).Run();
+        }
+
         private void EnterRoom(RoomType type)
         {
             roomOnFloor++;
@@ -130,8 +146,10 @@ namespace TextDungeon
             switch (type)
             {
                 case RoomType.Monster:
-                    Monster monster = MonsterFactory.Create(floor, random, settings);
-                    new Combat(player, monster, random, settings.FleeChance).Run();
+                    Fight(MonsterFactory.Create(floor, random, settings));
+                    break;
+                case RoomType.Boss:
+                    Fight(MonsterFactory.CreateBoss(floor, random, settings));
                     break;
                 case RoomType.Gold:
                     int gold = random.Next(5, 16);

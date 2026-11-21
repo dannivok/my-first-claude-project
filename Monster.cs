@@ -16,6 +16,15 @@ namespace TextDungeon
         /// <summary>A különleges képesség rövid leírása.</summary>
         public abstract string AbilityDescription { get; }
 
+        /// <summary>El lehet-e menekülni előle.</summary>
+        public virtual bool CanFlee => true;
+
+        /// <summary>A legyőzéséért járó gold.</summary>
+        public virtual int RollGoldReward(Random random)
+        {
+            return random.Next(3, 9);
+        }
+
         public bool IsAlive => Hp > 0;
 
         protected Monster(string name, int maxHp, int minDamage, int maxDamage, int xpReward)
@@ -121,6 +130,55 @@ namespace TextDungeon
                 text += $" Vért szív: +{healed} HP.";
             }
             return text;
+        }
+    }
+
+    /// <summary>
+    /// Boss: nem lehet elmenekülni előle, legalább 50 gold-ot ad.
+    /// Különlegesség: minden 3. támadása Földrengés (dupla sebzés), és fél HP alatt
+    /// egyszer feldühödik (+2 sebzés minden ütéshez).
+    /// </summary>
+    internal class Boss : Monster
+    {
+        private int attackCount;
+        private bool enraged;
+
+        public Boss(string name, int hp, int min, int max, int xp)
+            : base($"{name} (BOSS)", hp, min, max, xp) { }
+
+        public override string AbilityDescription =>
+            "Minden 3. támadása Földrengés (dupla sebzés); fél HP alatt feldühödik (+2 sebzés). Nem lehet elmenekülni előle!";
+
+        public override bool CanFlee => false;
+
+        public override int RollGoldReward(Random random)
+        {
+            return random.Next(50, 71);
+        }
+
+        public override string Attack(Player target, Random random)
+        {
+            string text = "";
+            if (!enraged && Hp * 2 < MaxHp)
+            {
+                enraged = true;
+                text = $"{Name} feldühödik! ";
+            }
+
+            attackCount++;
+            if (target.TryDodge(random))
+            {
+                return text + $"{Name} támad, de {target.Name} kitér előle!";
+            }
+
+            int damage = random.Next(MinDamage, MaxDamage + 1) + (enraged ? 2 : 0);
+            if (attackCount % 3 == 0)
+            {
+                damage *= 2;
+                text += "FÖLDRENGÉS! ";
+            }
+            int lost = target.TakeDamage(damage);
+            return text + $"{Name} lesújt: -{lost} HP.";
         }
     }
 

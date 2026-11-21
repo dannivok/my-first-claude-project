@@ -116,5 +116,24 @@ namespace TextDungeon
             "Nedves az ajtó küszöbe.",
             "Friss, tiszta levegő áramlik ki alatta.",
         };
+
+        // ---- Boss (N4) ----
+
+        public static readonly string[] BossRooms =
+        {
+            "Hatalmas, oszlopos trónterembe lépsz. A trónon valami megmozdul.",
+            "Egy csontokkal teleszórt barlang mélyén két izzó szem nyílik ki.",
+        };
+
+        public static readonly string[] BossHints =
+        {
+            "Egy óriási, vasalt kapu. Mögüle földrengésszerű dübörgés hallatszik.",
+            "A kapura vérrel festett jelek vannak. Mélyről mennydörgő hörgés szól.",
+        };
+
+        public static readonly string[] BossNames =
+        {
+            "Gólemkirály", "Csontlovag", "Árnysárkány", "Démonúr",
+        };
     }
 }

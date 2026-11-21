@@ -8,5 +8,6 @@ namespace TextDungeon
         Potion,
         Trap,
         Fountain,
+        Boss,
     }
 }

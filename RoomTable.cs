@@ -32,6 +32,8 @@ namespace TextDungeon
             new RoomInfo(RoomType.Potion, 12, Texts.PotionRooms, Texts.PotionHints),
             new RoomInfo(RoomType.Trap, 8, Texts.TrapRooms, Texts.TrapHints),
             new RoomInfo(RoomType.Fountain, 7, Texts.FountainRooms, Texts.FountainHints),
+            // A boss szobát nem sorsoljuk (0 esély): minden 5. floor utolsó szobája.
+            new RoomInfo(RoomType.Boss, 0, Texts.BossRooms, Texts.BossHints),
         };
 
         /// <summary>Szobatípust sorsol az esélyek szerint.</summary>
