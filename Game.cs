@@ -112,6 +112,18 @@ namespace TextDungeon
                     player.AddPotion();
                     Console.WriteLine("Találtál egy potion-t!");
                     break;
+                case RoomType.Trap:
+                    int lost = player.TakeDamage(random.Next(2, 6));
+                    Console.WriteLine($"Csapda! -{lost} HP. HP: {player.Hp}/{player.MaxHp}");
+                    if (!player.IsAlive)
+                    {
+                        Console.WriteLine("A csapda végzett veled...");
+                    }
+                    break;
+                case RoomType.Fountain:
+                    int healed = player.Heal(10);
+                    Console.WriteLine($"A forrás vize gyógyít: +{healed} HP. HP: {player.Hp}/{player.MaxHp}");
+                    break;
             }
         }
 

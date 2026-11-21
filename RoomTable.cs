@@ -26,10 +26,12 @@ namespace TextDungeon
     {
         private static readonly RoomInfo[] rooms =
         {
-            new RoomInfo(RoomType.Monster, 45, Texts.MonsterRooms, Texts.MonsterHints),
-            new RoomInfo(RoomType.Gold, 20, Texts.GoldRooms, Texts.GoldHints),
-            new RoomInfo(RoomType.Empty, 20, Texts.EmptyRooms, Texts.EmptyHints),
-            new RoomInfo(RoomType.Potion, 15, Texts.PotionRooms, Texts.PotionHints),
+            new RoomInfo(RoomType.Monster, 40, Texts.MonsterRooms, Texts.MonsterHints),
+            new RoomInfo(RoomType.Gold, 18, Texts.GoldRooms, Texts.GoldHints),
+            new RoomInfo(RoomType.Empty, 15, Texts.EmptyRooms, Texts.EmptyHints),
+            new RoomInfo(RoomType.Potion, 12, Texts.PotionRooms, Texts.PotionHints),
+            new RoomInfo(RoomType.Trap, 8, Texts.TrapRooms, Texts.TrapHints),
+            new RoomInfo(RoomType.Fountain, 7, Texts.FountainRooms, Texts.FountainHints),
         };
 
         /// <summary>Szobatípust sorsol az esélyek szerint.</summary>

@@ -6,5 +6,7 @@ namespace TextDungeon
         Gold,
         Empty,
         Potion,
+        Trap,
+        Fountain,
     }
 }
