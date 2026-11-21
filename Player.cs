@@ -75,6 +75,30 @@ namespace TextDungeon
             Gold += amount;
         }
 
+        /// <summary>Levonja az árat, ha van elég gold. Ha nincs, false.</summary>
+        public bool SpendGold(int amount)
+        {
+            if (Gold < amount)
+            {
+                return false;
+            }
+            Gold -= amount;
+            return true;
+        }
+
+        public void IncreaseMaxHp(int amount)
+        {
+            MaxHp += amount;
+            Heal(amount);
+        }
+
+        /// <summary>A sebzéstartomány mindkét végét növeli.</summary>
+        public void IncreaseDamage(int amount)
+        {
+            MinDamage += amount;
+            MaxDamage += amount;
+        }
+
         public void AddPotion()
         {
             Potions++;

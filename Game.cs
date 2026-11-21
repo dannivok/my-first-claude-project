@@ -7,6 +7,7 @@ namespace TextDungeon
         private const int RoomsPerFloor = 5;
 
         private readonly Random random = new Random();
+        private readonly Shop shop = new Shop();
         private Player player;
         private int floor = 1;
         private int roomOnFloor = 0;
@@ -86,6 +87,7 @@ namespace TextDungeon
             roomOnFloor = 0;
             Console.WriteLine();
             Console.WriteLine($"*** Lejutottál a(z) {floor}. floor-ra! A monsterek itt erősebbek. ***");
+            shop.Open(player);
         }
 
         private void EnterRoom(RoomType type)
