@@ -15,7 +15,7 @@ namespace TextDungeon
                 Console.WriteLine("A bemenet véget ért. Viszlát!");
                 Environment.Exit(0);
             }
-            return line;
+            return line.Replace("﻿", ""); // átirányított bemenet elején lehet BOM
         }
 
         /// <summary>Nem üres nevet kér be, üres név esetén újra kérdez.</summary>

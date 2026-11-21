@@ -34,6 +34,16 @@ namespace TextDungeon
             return Hp - before;
         }
 
+        public void AddGold(int amount)
+        {
+            Gold += amount;
+        }
+
+        public void AddPotion()
+        {
+            Potions++;
+        }
+
         /// <summary>Megiszik egy potion-t (+8 HP). Ha nincs potion, false.</summary>
         public bool DrinkPotion()
         {

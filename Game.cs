@@ -6,6 +6,7 @@ namespace TextDungeon
     {
         private const int RoomsPerFloor = 5;
 
+        private readonly Random random = new Random();
         private Player player;
         private int floor = 1;
         private int roomOnFloor = 0;
@@ -56,9 +57,34 @@ namespace TextDungeon
 
         private void GoForward()
         {
+            RoomType type = RoomTable.RollType(random);
+            EnterRoom(type);
+        }
+
+        private void EnterRoom(RoomType type)
+        {
             roomOnFloor++;
             roomsVisited++;
-            Console.WriteLine("Továbbmész egy újabb szobába.");
+            Console.WriteLine(RoomTable.RandomDescription(type, random));
+
+            switch (type)
+            {
+                case RoomType.Monster:
+                    Console.WriteLine("A szörny elbújik előled. (A harc a K5-ben jön.)");
+                    break;
+                case RoomType.Gold:
+                    int gold = random.Next(5, 16);
+                    player.AddGold(gold);
+                    Console.WriteLine($"Találtál {gold} gold-ot!");
+                    break;
+                case RoomType.Empty:
+                    Console.WriteLine("Itt nincs semmi érdekes.");
+                    break;
+                case RoomType.Potion:
+                    player.AddPotion();
+                    Console.WriteLine("Találtál egy potion-t!");
+                    break;
+            }
         }
 
         private void DrinkPotion()
